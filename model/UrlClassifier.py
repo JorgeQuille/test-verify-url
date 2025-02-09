@@ -35,7 +35,12 @@ class UrlClassifier:
         url_vectorizada = self.vectorizer.transform([url])
         prediction = self.model.predict(url_vectorizada)
         probability = self.model.predict_proba(url_vectorizada)[0][1]
-        return prediction[0], probability
+        category = self.df_classification.loc[self.df_classification['num_type'] == prediction[0], 'type']
+        if not category.empty:
+            category = f"{prediction} {category.values[0]}"
+        else:
+            category = f'No se encontró categoría para la predicción {prediction}.'
+        return category, probability
     
     def predict_csv(self, model_name, df, column_name):
         with open(f'{self.models.get(model_name)}.pkl', 'rb') as f:
