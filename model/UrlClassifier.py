@@ -1,6 +1,5 @@
 import pickle
 import re
-import sklearn
 
 class UrlClassifier:
 
