@@ -42,7 +42,7 @@ class UrlClassifier:
             self.model = pickle.load(f)
 
         df[column_name] = df[column_name].apply(self.normalize_url)
-        url_vectorizada = self.vectorizer.transform(df['url'])
+        url_vectorizada = self.vectorizer.transform(df[column_name])
 
         probability = self.model.predict_proba(url_vectorizada)  # Devuelve las probabilidades
         prediction = self.model.predict(url_vectorizada)  # Devuelve la clase predicha
