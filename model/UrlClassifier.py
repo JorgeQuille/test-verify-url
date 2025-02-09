@@ -32,3 +32,24 @@ class UrlClassifier:
         prediction = self.model.predict(url_vectorizada)
         probability = self.model.predict_proba(url_vectorizada)[0][1]
         return prediction[0], probability
+    
+    def predict_csv(self, model_name, df, column_name):
+        with open(f'{self.models.get(model_name)}.pkl', 'rb') as f:
+            self.model = pickle.load(f)
+
+        df[column_name] = df[column_name].apply(self.normalize_url)
+        url_vectorizada = self.vectorizer.transform(df['url'])
+
+        probability = self.model.predict_proba(url_vectorizada)  # Devuelve las probabilidades
+        prediction = self.model.predict(url_vectorizada)  # Devuelve la clase predicha
+
+        df['prediccion'] = prediction
+        df['probabilidad'] = probability[:, 1] * 100
+
+        """df = df.merge(dataSet_classify_url_types,
+                    left_on='prediccion',  # Columna de predicción en el DataFrame original
+                    right_on='num_type',
+                    how='left')
+        df.drop(columns=['num_type'], inplace=True)"""
+
+        return df
