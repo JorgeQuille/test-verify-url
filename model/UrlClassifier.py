@@ -34,7 +34,7 @@ class UrlClassifier:
         url = self.normalize_url(url)
         url_vectorizada = self.vectorizer.transform([url])
         prediction = self.model.predict(url_vectorizada)
-        probability = self.model.predict_proba(url_vectorizada)[0][1]
+        probability = self.model.predict_proba(url_vectorizada)[0][1] * 100
         category = self.df_classification.loc[self.df_classification['num_type'] == prediction[0], 'type']
         if not category.empty:
             category = f"{prediction} {category.values[0]}"
