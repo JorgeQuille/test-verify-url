@@ -1,5 +1,6 @@
 import pickle
 import re
+import pandas as pd
 
 class UrlClassifier:
 
@@ -8,6 +9,8 @@ class UrlClassifier:
         "Regresión Logística": 'modelo_regresion_logistica1',
         "SVM": 'modelo_SVM1'
     }
+
+    df_classification = pd.read_csv('https://raw.githubusercontent.com/JorgeQuille/test-verify-url/main/classification.csv') 
     
     def __init__(self):
         with open('vectorizer_param.pkl', 'rb') as f:
@@ -27,6 +30,7 @@ class UrlClassifier:
         
         with open(f'{self.models.get(model_name)}.pkl', 'rb') as f:
             self.model = pickle.load(f)
+
         url = self.normalize_url(url)
         url_vectorizada = self.vectorizer.transform([url])
         prediction = self.model.predict(url_vectorizada)
@@ -46,10 +50,10 @@ class UrlClassifier:
         df['prediccion'] = prediction
         df['probabilidad'] = probability[:, 1] * 100
 
-        """df = df.merge(dataSet_classify_url_types,
+        df = df.merge(self.df_classification,
                     left_on='prediccion',  # Columna de predicción en el DataFrame original
                     right_on='num_type',
                     how='left')
-        df.drop(columns=['num_type'], inplace=True)"""
+        df.drop(columns=['num_type'], inplace=True)
 
         return df
