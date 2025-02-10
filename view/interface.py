@@ -77,7 +77,7 @@ def view_interface():
             st.write(f"Predicción: {prediction}")
             st.write(f"Probabilidad: {probability:.2f} %")
 
-    st.write("O")
+    st.write("**************************")
     uploaded_file = st.file_uploader("Elige un archivo CSV", type="csv")
     
     if uploaded_file is not None:
